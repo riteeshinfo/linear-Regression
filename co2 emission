@@ -1,0 +1,288 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled2.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "authorship_tag": "ABX9TyOT9ZWG5nnCrGkZ60hKLGP+",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/riteeshinfo/linear-Regression/blob/main/co2%20emission\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 28,
+      "metadata": {
+        "id": "8Zi2Ug_ZAH2A"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "mydata={\n",
+        "    'ENGINESIZE':[2,2.4,1.5,3.5,3.5,3.5,3.5,3.7,3.7,2.4,2.4,3.5,5.9,5.9],\n",
+        "    'CYLINDERS':[4,4,4,6,6,6,6,6,6,4,4,6,12,12],\n",
+        "    'FUEL_CONSUMPTION':[8.5,9.6,5.9,11.1,10.6,10,10.1,11.1,11.6,9.2,9.8,10.4,15.6,15.6],\n",
+        "    'CO2_EMISSION':[196,221,136,255,244,230,232,255,267,212,225,239,359,359],\n",
+        "}\n",
+        "a=pd.DataFrame(mydata,[1,2,3,4,5,6,7,8,9,10,11,12,13,14])\n",
+        "print(a)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "WoIxY75jAjGx",
+        "outputId": "d105e03d-eb72-40fd-bcb7-094ecfbab437"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "    ENGINESIZE  CYLINDERS  FUEL_CONSUMPTION  CO2_EMISSION\n",
+            "1          2.0          4               8.5           196\n",
+            "2          2.4          4               9.6           221\n",
+            "3          1.5          4               5.9           136\n",
+            "4          3.5          6              11.1           255\n",
+            "5          3.5          6              10.6           244\n",
+            "6          3.5          6              10.0           230\n",
+            "7          3.5          6              10.1           232\n",
+            "8          3.7          6              11.1           255\n",
+            "9          3.7          6              11.6           267\n",
+            "10         2.4          4               9.2           212\n",
+            "11         2.4          4               9.8           225\n",
+            "12         3.5          6              10.4           239\n",
+            "13         5.9         12              15.6           359\n",
+            "14         5.9         12              15.6           359\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "x=a.iloc[:, :3].values\n",
+        "y=a.iloc[:, -1].values\n",
+        "print(x)\n",
+        "print(y)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4-P5JXf4C-qp",
+        "outputId": "e6f09fd1-1485-4673-8240-d3c3264ce048"
+      },
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 2.   4.   8.5]\n",
+            " [ 2.4  4.   9.6]\n",
+            " [ 1.5  4.   5.9]\n",
+            " [ 3.5  6.  11.1]\n",
+            " [ 3.5  6.  10.6]\n",
+            " [ 3.5  6.  10. ]\n",
+            " [ 3.5  6.  10.1]\n",
+            " [ 3.7  6.  11.1]\n",
+            " [ 3.7  6.  11.6]\n",
+            " [ 2.4  4.   9.2]\n",
+            " [ 2.4  4.   9.8]\n",
+            " [ 3.5  6.  10.4]\n",
+            " [ 5.9 12.  15.6]\n",
+            " [ 5.9 12.  15.6]]\n",
+            "[196 221 136 255 244 230 232 255 267 212 225 239 359 359]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_train,X_test,Y_train,Y_test=train_test_split(x,y, test_size=0.2,random_state=0)"
+      ],
+      "metadata": {
+        "id": "YEF0K-FLINhw"
+      },
+      "execution_count": 32,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(X_train)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "EQWOtu2rJaZA",
+        "outputId": "20bab6b2-f0e4-4e33-8fb4-12dbfca8d0bc"
+      },
+      "execution_count": 37,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 3.5  6.  10.4]\n",
+            " [ 1.5  4.   5.9]\n",
+            " [ 5.9 12.  15.6]\n",
+            " [ 2.4  4.   9.2]\n",
+            " [ 2.4  4.   9.6]\n",
+            " [ 3.7  6.  11.1]\n",
+            " [ 2.4  4.   9.8]\n",
+            " [ 3.5  6.  11.1]\n",
+            " [ 2.   4.   8.5]\n",
+            " [ 3.5  6.  10. ]\n",
+            " [ 5.9 12.  15.6]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(Y_train)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "LJhgFNnUJo13",
+        "outputId": "1e5c6c49-fc5e-4d7a-ec80-89a2bd727498"
+      },
+      "execution_count": 40,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[239 136 359 212 221 255 225 255 196 230 359]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.linear_model import LinearRegression\n",
+        "regressor = LinearRegression()\n",
+        "regressor.fit(X_train, Y_train)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2rP630sqDfDx",
+        "outputId": "3e21125c-d348-40c9-debb-166d0934153d"
+      },
+      "execution_count": 33,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "LinearRegression()"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 33
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "y_pred = regressor.predict(X_test)"
+      ],
+      "metadata": {
+        "id": "D9t_1ZuAGQsf"
+      },
+      "execution_count": 41,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pickle"
+      ],
+      "metadata": {
+        "id": "pERtCM2mFDXw"
+      },
+      "execution_count": 42,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pickle.dump(regressor, open('model.pkl','wb'))"
+      ],
+      "metadata": {
+        "id": "IDP3cO-QJ56I"
+      },
+      "execution_count": 43,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "model = pickle.load(open('model.pkl','rb'))\n",
+        "a=int(input('enter the Enginesize:'))\n",
+        "b=int(input('enter the cylinder:'))\n",
+        "c=int(input('enter the fuel consumption:'))\n",
+        "print(model.predict([[a,b,c]]))\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "uWmEZNTTJ_-X",
+        "outputId": "562a3a1d-8375-4194-8417-0e3c33399b67"
+      },
+      "execution_count": 47,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "enter the Enginesize:4\n",
+            "enter the cylinder:10\n",
+            "enter the fuel consumption:12\n",
+            "[276.75678944]\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
